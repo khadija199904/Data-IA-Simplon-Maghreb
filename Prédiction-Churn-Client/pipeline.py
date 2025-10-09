@@ -8,16 +8,23 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils import  class_weight
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
-    confusion_matrix, classification_report
+    confusion_matrix, classification_report, roc_curve, auc, precision_recall_curve
 )
+import matplotlib.pyplot as plt
 
+# ----------------------------------------------------------
+# Fonction pour charger dataset 
+# ----------------------------------------------------------
 
 def load_dataset (filepath) :
     # Charger le fichier CSV
     df = pd.read_csv(filepath)
     print(df.head())
     return df 
-# Préparation de donnéé 
+# ----------------------------------------------------------
+# 
+# ----------------------------------------------------------
+
 def supprime_separe_data(df,cols_inutile= None):
     """
     Supprime les colonnes spécifiées et sépare les données en numériques et catégorielles.
@@ -46,8 +53,10 @@ def supprime_separe_data(df,cols_inutile= None):
           
     return df_cleaned, df_numer, df_catg
     
-
+# ----------------------------------------------------------
 # Function for encoding the categorial columns
+# ----------------------------------------------------------
+
 def encode_categorical(df, binary_cols=None, ordinal_cols=None):
 
     """
@@ -78,9 +87,11 @@ def encode_categorical(df, binary_cols=None, ordinal_cols=None):
 
     return df_encoded
 
+# -----------------------------
+# Fonction dr normalisation
+# -----------------------------
 
-
-def normalize_fetures(df_numeric, method='minmax'):
+def normalize_fetures(df_numeric, method):
     """
     Normalise les colonnes numériques d'un DataFrame .
     Méthode de normalisation :
@@ -114,7 +125,9 @@ def normalize_fetures(df_numeric, method='minmax'):
     
     
     return df_scaled
-
+# -----------------------------
+# Fonction Split data 
+# -----------------------------
 
 def split_data (df,target_col) :
 
@@ -124,15 +137,18 @@ def split_data (df,target_col) :
    X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=42)
 
    return X_train, X_test, y_train, y_test
+# -----------------------------
+# Fonction d'entraînement
+# -----------------------------
 
-def traning_model_data ( X_train, X_test, y_train, y_test, model):
+def traning_model ( X_train, y_train, model):
    
     if  model == 'LogisticRegression':
        # Create an instance of LogisticRegression classifier
-          model = LogisticRegression(class_weight='balanced')
+          model = LogisticRegression()
        # Create an instance of Support victor classifier
     elif model == "SVC":
-        model = SVC()   
+        model = SVC(probability=True)  # probability=True pour ROC/PR   
        # Create an instance of Random Forest classifier
     elif model == 'RFC' :
         model = RandomForestClassifier()
@@ -141,22 +157,76 @@ def traning_model_data ( X_train, X_test, y_train, y_test, model):
     
     # Fit the model
     model.fit(X_train, y_train)
+
+    return model
+
+# -----------------------------
+# Fonction d'évaluation
+# -----------------------------
+def evaluate_model(model,X_test,y_test,labels=None): 
+    """
+    Évalue un modèle de classification sur des données de test.
+    
+    
+    Returns:
+        rapport de classification 
+        Accuracy, Recall, F1-score, courbe ROC ,PR_Curve et confusion Matrix
+        
+        """
+    
     # Create the predictions
 
     y_predict = model.predict(X_test)
  
+    # Calcul des métriques globales
+    accuracy = accuracy_score(y_test, y_predict)
+    recall = recall_score(y_test, y_predict)
+    f1 = f1_score(y_test, y_predict)
+
+    print(f"=== Classification Metrics du {model} ===")
+    print(f"Accuracy  : {accuracy:.4f}")
+    print(f"Recall    : {recall:.4f}")
+    print(f"F1-score  : {f1:.4f}")
+    print(f"Rapport de classification du {model}")
+    print(classification_report(y_test, y_predict))
+
     #  Matrice de confusion
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y_test, y_predict)
     plt.figure(figsize=(5, 4))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
     plt.title("Matrice de confusion")
     plt.xlabel("Prédictions")
     plt.ylabel("Valeurs réelles")
     plt.show()
+    # -----------------------------------------------
+    # Probabilités pour ROC/PR
+    # ----------------------------------------------- 
+    # La plupart des modèles comme LogisticRegression ou RandomForest
+    # ont la méthode predict_proba() qui retourne un tableau [n_samples, n_classes]
+    # Probabilités pour ROC et PR
+    # Certains modèles comme SVC (sans probability=True) n'ont pas predict_proba
+    # mais ont decision_function() qui retourne un "score" indiquant
+    # la distance à la frontière de décision
+    # On peut utiliser ce score pour tracer ROC/PR
 
-     #  Rapport détaillé par classe
-    print("Rapport de classification")
-    print(classification_report(y_test, y_predict))
+    if hasattr(model, "predict_proba"):
+        y_proba = model.predict_proba(X_test)[:, 1]
+    else hasattr(model, "decision_function"):
+        y_proba = model.decision_function(X_test)
+    
+
+    
+    # ROC
+    fpr, tpr, _ = roc_curve(y_test, y_proba)
+    roc_auc = auc(fpr, tpr)
+    plt.figure()
+    plt.plot(fpr, tpr, label=f'ROC curve (AUC = {roc_auc:.2f})')
+    plt.plot([0,1],[0,1],'k--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend(loc='lower right')
+    plt.show()
 
     return 
 
