@@ -146,7 +146,7 @@ def traning_model ( X_train, y_train, model):
     if  model == 'LogisticRegression':
        # Create an instance of LogisticRegression classifier
           model = LogisticRegression()
-       # Create an instance of Support victor classifier
+       # Create an instance of Support victor classifier 
     elif model == "SVC":
         model = SVC(probability=True)  # probability=True pour ROC/PR   
        # Create an instance of Random Forest classifier
@@ -211,7 +211,7 @@ def evaluate_model(model,X_test,y_test,labels=None):
 
     if hasattr(model, "predict_proba"):
         y_proba = model.predict_proba(X_test)[:, 1]
-    else hasattr(model, "decision_function"):
+    else :
         y_proba = model.decision_function(X_test)
     
 
