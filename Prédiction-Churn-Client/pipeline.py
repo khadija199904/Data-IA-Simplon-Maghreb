@@ -182,19 +182,25 @@ def evaluate_model(model,X_test,y_test,labels=None):
     y_predict = model.predict(X_test)
  
     # Calcul des métriques globales
-    metrics = {
+    accuracy = accuracy_score(y_test, y_predict)
+    recall = recall_score(y_test, y_predict)
+    f1 = f1_score(y_test, y_predict)
 
-    "accuracy": accuracy_score(y_test, y_predict),
-    "recall": recall_score(y_test, y_predict),
-    "f1": f1_score(y_test, y_predict)
-               }
-    # Convertir en DataFrame pour tableau
-    metrics_table = pd.DataFrame.from_dict(metrics, orient='index', columns=['Score'])
-
+    print(f"=== Classification Metrics du {model} ===")
+    print(f"Accuracy  : {accuracy:.4f}")
+    print(f"Recall    : {recall:.4f}")
+    print(f"F1-score  : {f1:.4f}")
+    print(f"Rapport de classification du {model}")
+    print(classification_report(y_test, y_predict))
 
     #  Matrice de confusion
     cm = confusion_matrix(y_test, y_predict)
-    
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+    plt.title("Matrice de confusion")
+    plt.xlabel("Prédictions")
+    plt.ylabel("Valeurs réelles")
+    plt.show()
     # -----------------------------------------------
     # Probabilités pour ROC/PR
     # ----------------------------------------------- 
@@ -206,98 +212,46 @@ def evaluate_model(model,X_test,y_test,labels=None):
     # la distance à la frontière de décision
     # On peut utiliser ce score pour tracer ROC/PR
 
+    # Probabilités pour ROC et PR
     if hasattr(model, "predict_proba"):
         y_proba = model.predict_proba(X_test)[:, 1]
-    else :
+    else : 
         y_proba = model.decision_function(X_test)
     
     
-    # ROC
-    # Données pour courbes ROC et PR (pour binaire)
-    roc_data = None
-    pr_data = None
+
+    
     # ROC
     fpr, tpr, _ = roc_curve(y_test, y_proba)
     roc_auc = auc(fpr, tpr)
-    roc_data = (fpr, tpr, roc_auc)
-    
-    # Precision-Recall
+    plt.figure()
+    plt.plot(fpr, tpr, label=f'ROC curve (AUC = {roc_auc:.2f})')
+    plt.plot([0,1],[0,1],'k--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend(loc='lower right')
+    plt.show()
+
+ # Precision-Recall
     precision_vals, recall_vals, _ = precision_recall_curve(y_test, y_proba)
     pr_auc = auc(recall_vals, precision_vals)
-    pr_data = (recall_vals, precision_vals, pr_auc)
-    
+    plt.figure()
+    plt.plot(recall_vals, precision_vals, label=f'PR curve (AUC = {pr_auc:.2f})')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall Curve')
+    plt.legend(loc='lower left')
+    plt.show()   
 
-    return metrics, cm, roc_data, pr_data
-# -----------------------------
-# Sauvegarde
-# -----------------------------
-
-def save_evaluation_resultes(results,save_dir="results") : 
-    """
-    Sauvegarde métriques, matrice de confusion et courbes ROC/PR pour un modèle.
-    """
-    os.makedirs(save_dir, exist_ok=True)
-    # Tableau comparatif pour tous les modèles
-    comparison_table = pd.DataFrame()
-
-    for model_name, (metrics_table, cm, roc_data, pr_data) in results.items():
-        model_subdir = os.path.join(save_dir, model_name)
-        os.makedirs(model_subdir, exist_ok=True)
-        
-        # Sauvegarde tableau des métriques
-        
-        df_metrics = pd.DataFrame.from_dict(metrics_table, orient='index', columns=['Score'])
-
-        # Ajouter au tableau comparatif
-        temp = df_metrics.copy()
-        temp.columns = [model_name]  # nom du modèle en colonne
-        comparison_table = pd.concat([comparison_table, temp], axis=1)
-
-        # Matrice de confusion
-        plt.figure(figsize=(5, 4))
-        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
-        plt.title("Matrice de confusion")
-        plt.xlabel("Prédictions")
-        plt.ylabel("Valeurs réelles")
-        plt.savefig(os.path.join(model_subdir, "confusion_matrix.png"))
-        plt.close()
-
-        # Courbes ROC 
-        if roc_data is not None:
-            fpr, tpr, roc_auc = roc_data
-            plt.figure()
-            plt.plot(fpr, tpr, label=f'ROC (AUC = {roc_auc:.2f})')
-            plt.plot([0,1],[0,1],'k--')
-            plt.title(f"ROC Curve - {model_name}")
-            plt.xlabel('Faux Positifs')
-            plt.ylabel('Vrais Positifs')
-            plt.legend(loc='lower right')
-            plt.tight_layout()
-            plt.savefig(os.path.join(model_subdir, "roc_curve.png"))
-            plt.close()
-
-        if pr_data is not None:
-            recall_vals, precision_vals, pr_auc = pr_data
-            plt.figure()
-            plt.plot(recall_vals, precision_vals, label=f'PR (AUC = {pr_auc:.2f})')
-            plt.title(f"Precision-Recall Curve - {model_name}")
-            plt.xlabel('Recall')
-            plt.ylabel('Precision')
-            plt.legend(loc='lower left')
-            plt.tight_layout()
-            plt.savefig(os.path.join(model_subdir, "pr_curve.png"))
-            plt.close()
-    # Sauvegarder le tableau comparatif global
-    comparison_table.to_csv(os.path.join(save_dir, "comparison_metrics.csv"))
-    print(f"✅ Tous les résultats sauvegardés dans {save_dir}")
-
-    return
+    return 
 
 def main():
     
-    print("\ Démarrage du pipeline...\n")
-    df = load_dataset("C:\Users\khadija\Data-IA-Simplon-Maghreb\Prédiction-Churn-Client\Churn_client-dataset.csv")  
-    
+    print(" Démarrage du pipeline")
+     
+    df = load_dataset("C:/Users/khadija/Desktop/simplon project/Data-IA-Simplon-Maghreb/Prédiction-Churn-Client/Churn-Client-dataset.csv")
+
 
     df_cleaned = cleaning_data(df,cols_inutile = ['customerID','gender'])
 
@@ -315,13 +269,11 @@ def main():
 # Entraînement 
 # ---------------------------------------------------------------------------------------------- 
     model_name = ["LogisticRegression", "SVC"]
-    results = {}
+    
     for m in model_name:
       model = traning_model (X_train_scaled,y_train_scaled, m)
-      metrics_table, cm, roc_data, pr_data, = evaluate_model(model, X_test, y_test)
-      results[m] = (metrics_table, cm, roc_data, pr_data)
-    
-    save_evaluation_resultes(results,save_dir="resultas de l'evaluation ")
+      model.fit(X_train_scaled,y_train_scaled)
+    evaluate_model(model, X_test_scaled, y_test_scaled)
 # -----------------------------
 # Lancement
 # -----------------------------
