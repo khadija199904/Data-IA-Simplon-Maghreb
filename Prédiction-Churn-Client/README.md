@@ -4,28 +4,19 @@
 L’objectif de ce projet est de développer un pipeline complet de Machine Learning supervisé pour prédire le désabonnement (churn) des clients d’une entreprise de télécommunications.
 
 ## Description
-Ce projet couvre toutes les étapes d’un cycle complet de Data Science :
+  - Ce projet couvre toutes les étapes d’un cycle complet de Data Science :
 
-Exploration et analyse du dataset (EDA) à l’aide d’un notebook Jupyter.
+  - Exploration et analyse du dataset (EDA) à l’aide d’un notebook Jupyter.
 
-Préparation et traitement des données dans un script Python structuré.
+  - Préparation et traitement des données dans un script Python structuré.
 
-Entraînement et évaluation de plusieurs modèles de classification.
+  - Entraînement et évaluation de plusieurs modèles de classification.
 
-Mise en place de tests unitaires pour garantir la fiabilité du pipeline.
+  - Mise en place de tests unitaires pour garantir la fiabilité du pipeline.
 
-Comparaison et sélection du meilleur modèle selon des métriques de performance clés.
+  - Comparaison et sélection du meilleur modèle selon des métriques de performance clés.
 
 ---
-Prédiction-Churn-Client/
-│
-├── EDA_and_visualisations.ipynb   # Analyse exploratoire des données
-├── pipeline.py                    # Préparation des données et entraînement des modèles
-├── test_pipeline.py               # Tests unitaires automatisés
-├── requirements.txt               # Liste des dépendances du projet
-├── README.md                      # Documentation du projet
-└── data/                          # Dossier contenant les données sources
-
 
 ## Résultats et choix du modèle
 | Modèle                               | Accuracy | Recall | F1-score |
@@ -75,5 +66,6 @@ pytest test_pipeline.py
 - Optimisation des hyperparamètres avec GridSearchCV.
 
  - Automatisation du pipeline avec MLflow.
+
 
 
