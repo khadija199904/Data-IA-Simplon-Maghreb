@@ -4,7 +4,7 @@ import pytest
 
 def test_dim(df,df_cleaned) :
     
-    assert df.shape == df_cleaned.shape , 
+    assert df.shape == df_cleaned.shape 
     print(" Test des dimensions réussi ")
 
     
