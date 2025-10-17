@@ -10,3 +10,4 @@ def test_dim(df,df_cleaned) :
 def test_mae(mae):
     seuil = 10 
     assert mae <= seuil
+    print(" Test des dimensions réussi ",mae <= seuil )
