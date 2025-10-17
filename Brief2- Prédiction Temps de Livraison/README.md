@@ -28,9 +28,16 @@ Cette prédiction permet à l’entreprise de :
 
 ## Résultats 
 
-- Un modèle capable de prédire le temps total de livraison avec une **erreur moyenne acceptable (MAE)**  
-- Des dashboards ou rapports simples pour suivre la performance du modèle  
-- Une base solide pour intégrer le modèle dans un **système d’information** ou une application de suivi des commandes  
+## 📊 Résultats des Modèles de Régression
+
+| Modèle                              | MAE (Mean Absolute Error)  | 
+|-------------------------------------|----------------------------|
+| **Random Forest Regressor**         | 6.83                       | 
+| **SVR (Support Vector Regression)** | 6.24                       | 
+
+###  Conclusion
+Le modèle **SVR** surpasse le **Random Forest** avec un **MAE plus faible (6.24 vs 6.83)**, indiquant une meilleure performance de prédiction sur l'ensemble de test.
+  
 
 ---
 
