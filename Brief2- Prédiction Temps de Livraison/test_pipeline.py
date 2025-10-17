@@ -1,6 +1,6 @@
 import pytest
 
-def test_shape_ligne (df,df_cleaned) :
+def test_shape(df,df_cleaned) :
     
     assert df.shape[0] == df_cleaned.shape[0] 
 
