@@ -1,11 +1,9 @@
 import pytest
 
-
-
 def test_dim(df,df_cleaned) :
     
     assert df.shape == df_cleaned.shape 
-    print(" Test des dimensions réussi ")
+    print(" Test des dimensions réussi ",df_cleaned.shape)
 
     
 
