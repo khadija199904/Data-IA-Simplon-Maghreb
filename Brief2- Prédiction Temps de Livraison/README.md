@@ -38,5 +38,16 @@ Cette prédiction permet à l’entreprise de :
 
 1. Cloner le dépôt :  
 ```bash
-git clone <URL_DU_DEPOT>
-cd projet-livraison
+git clone https://github.com/Data-IA-Simplon-Maghreb/Brief2- Prédiction Temps de Livraison.git
+cd Brief2- Prédiction Temps de Livraison 
+```
+2. Installer requirements :  
+```bash
+pip install -r requirements.txt
+```
+3. Exécuter le notebook principal
+```bash
+jupyter notebook Prédiction-Temps-Livraison.ipynb
+```
+
+
