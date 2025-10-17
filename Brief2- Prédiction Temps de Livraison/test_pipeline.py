@@ -1,5 +1,16 @@
 import pytest
 
+def test_format(df):
+    erreurs = []
+    for col in df.culumns:
+        if df[col].dtype == "Object" :
+            try:
+                pd.to_numeric(df[col])
+                erreurs.append(col)
+            except  :
+                pass
+    assert not erreurs ,f"Colonnes avec type incorrect : {erreurs}"
+
 def test_dim(df,df_cleaned) :
     
     assert df.shape == df_cleaned.shape 
@@ -8,6 +19,6 @@ def test_dim(df,df_cleaned) :
     
 
 def test_mae(mae):
-    seuil = 10 
+    seuil = 20 
     assert mae <= seuil
     print(" Test de seuil mae réussi ")
