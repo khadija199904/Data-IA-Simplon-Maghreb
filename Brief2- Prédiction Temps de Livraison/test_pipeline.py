@@ -2,9 +2,10 @@ import pytest
 
 
 
-def test_shape(df,df_cleaned) :
+def test_dim(df,df_cleaned) :
     
-    assert df.shape == df_cleaned.shape , "dimension de df n'est le meme que le df netoyyé "
+    assert df.shape == df_cleaned.shape , 
+    print(" Test des dimensions réussi ")
 
     
 
