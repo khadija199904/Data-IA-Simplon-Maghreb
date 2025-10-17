@@ -2,7 +2,7 @@ import pytest
 
 def test_format(df):
     erreurs = []
-    for col in df.culumns:
+    for col in df.columns:
         if df[col].dtype == "Object" :
             try:
                 pd.to_numeric(df[col])
