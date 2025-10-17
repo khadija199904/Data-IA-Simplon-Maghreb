@@ -10,6 +10,7 @@ def test_format(df):
             except  :
                 pass
     assert not erreurs ,f"Colonnes avec type incorrect : {erreurs}"
+    print("Test Format réussi")
 
 def test_dim(df,df_cleaned) :
     
