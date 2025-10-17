@@ -19,6 +19,6 @@ def test_dim(df,df_cleaned) :
     
 
 def test_mae(mae):
-    seuil = 20 
+    seuil = 10 
     assert mae <= seuil
     print(" Test de seuil mae réussi ")
