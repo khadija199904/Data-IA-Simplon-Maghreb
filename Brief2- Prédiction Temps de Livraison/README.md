@@ -16,9 +16,9 @@ Cette prédiction permet à l’entreprise de :
 2. **Prétraitement des Données**  
 3. **Sélection de Features**  
 4. **Modélisation classique**  
-  - Sélection features avec **SelectKBest**  
-  - Entraînement les modèles de régression ( Random Forest regressor et support vector regressor)  
-  - Optimisation des hyperparamètres via **GridSearchCV**
+   - Sélection features avec **SelectKBest**  
+   - Entraînement les modèles de régression ( Random Forest regressor et support vector regressor)  
+   - Optimisation des hyperparamètres via **GridSearchCV**
 3. **Approche : Pipeline sklearn complet** 
    - Création d’un **pipeline sklearn** combinant prétraitement, sélection de features (**SelectKBest**) et modèle de régression.  
    - Optimisation des hyperparamètres avec **GridSearchCV**.
