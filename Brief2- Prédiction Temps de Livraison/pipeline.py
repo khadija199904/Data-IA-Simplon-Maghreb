@@ -184,6 +184,7 @@ for model_name in modeles :
         best_mae = res['MAE']
         best_model = res['Best_model']
         best_name = model_name
+        
 print(f"Meilleur modèle : {best_name} avec MAE = {best_mae:.3f}")       
     
 
