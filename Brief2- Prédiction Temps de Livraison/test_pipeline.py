@@ -1,5 +1,6 @@
 import pytest
-
+import pandas as pd
+# Test unitaire :  vérifier les colonnes mal typées
 def test_format(df):
     erreurs = []
     for col in df.columns:
@@ -10,14 +11,14 @@ def test_format(df):
             except  :
                 pass
     assert not erreurs ,f"Colonnes avec type incorrect : {erreurs}"
-    print("Test Format réussi")
-
+    print("Le test de format est réussi : toutes les colonnes numériques ont le bon type.")
+    
+# Test unitaire : vérifier que le dataset nettoyé garde les mêmes dimensions
 def test_dim(df,df_cleaned) :
     
     assert df.shape == df_cleaned.shape 
     print(" Test des dimensions réussi ",df_cleaned.shape)
 
-    
 
 def test_mae(mae):
     seuil = 10 
