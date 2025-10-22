@@ -24,4 +24,4 @@ jobs:
           pip install pytest joblib scikit-learn pandas
 
       - name: Exécuter les tests
-        run: pytest -v test_delivery_time.py
+        run: pytest -v test_pipeline.py
