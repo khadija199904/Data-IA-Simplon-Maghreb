@@ -1,27 +1,27 @@
-name: testing-workflow
+name: Run Unit Tests
 
 on:
-  - push
-  - pull_request
+  push:
+    branches: [ master]
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout du code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Installer Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: '3.11'
 
-      - name: Run workflow inside subfolder
-        working-directory: "Brief2- Prédiction Temps de Livraison"
+      - name: Installer les dépendances
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest joblib scikit-learn pandas
 
-      - name: Run pytest
-        run: pytest
+      - name: Exécuter les tests
+        run: pytest -v test_delivery_time.py
