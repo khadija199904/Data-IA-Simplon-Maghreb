@@ -2,10 +2,11 @@ name: Run Unit Tests
 
 on:
   push:
-    branches: [ main]
+    branches: [ main ]
 
 jobs:
   test:
+    name: Run Pytest in Folder
     runs-on: ubuntu-latest
 
     steps:
@@ -23,5 +24,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest joblib scikit-learn pandas
 
-      - name: Exécuter les tests
-        run: pytest -v test_pipeline.py
+      - name: Exécuter les tests unitaires
+        run: pytest -v "Brief2- Prédiction Temps de Livraison/test_pipeline.py"
+
