@@ -20,8 +20,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r Brief2_Prediction_Temps_de_Livraison/requirements.txt
-          pip install pytest joblib scikit-learn pandas
+          
+          pip install pytest scikit-learn pandas seaborn matplotlib
 
       - name: Run tests
         run: pytest -v Brief2_Prediction_Temps_de_Livraison/test_pipeline.py
+
+
