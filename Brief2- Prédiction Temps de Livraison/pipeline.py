@@ -180,7 +180,7 @@ for model_name in modeles :
      test_mae(res['MAE'] )
      resultats.append(res)
      for res in resultats:
-       if res['MAE'] < best_mae :
+       if res['MAE'] < best_mae :   
         best_mae = res['MAE']
         best_model = res['Best_model']
         best_name = model_name

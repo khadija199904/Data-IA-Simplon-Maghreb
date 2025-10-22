@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
-# Test unitaire :  vérifier les colonnes mal typées
+from pipeline import best_mae
+# Test unitaire :  vérifier les colonnes mal typées 
 def test_format(df):
     erreurs = []
     for col in df.columns:
@@ -24,3 +25,6 @@ def test_mae(mae):
     seuil = 10 
     assert mae <= seuil
     print(" Test de seuil mae réussi ")
+
+
+

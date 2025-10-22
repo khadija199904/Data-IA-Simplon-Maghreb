@@ -2,5 +2,4 @@ pandas
 pytest
 matplotlib
 scikit-learn
-numpy
 seaborn
